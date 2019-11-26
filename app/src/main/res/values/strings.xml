@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">HeroApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="welcome_to_hero_app">Welcome To Hero App</string>
+    <string name="show_heroes">Show Super Heroes</string>
+    <string name="create_hero">Create Super Hero</string>
+    <string name="save">Save</string>
+    <string name="super_hero_name">Super Hero Name:</string>
+    <string name="create_super_hero">Create Super Hero</string>
+    <string name="write_a_story_about_your_super_hero">Write a story about your Super Hero:</string>
+    <string name="secondary_power">Secondary Power</string>
+    <string name="primary_power">Primary Power</string>
+    <string name="here_you_will_have_a_list_of_superheroes_and_their_stories">
+        Here You Will have a list of superheroes and their stories, sorted in some kind of a collection.</string>
+    <string name="here_should_be_right_individual_hero">Here should be right individual hero</string>
+    <string name="search">Search</string>
+    <string name="exit">Exit</string>
+
+    <string-array name="superhero_array">
+        <item>Lightning</item>
+        <item>Flight</item>
+        <item>Web Slinging</item>
+        <item>Laser Vision</item>
+        <item>Super Strength</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="open_drawer">Open Navigation Drawer</string>
+    <string name="close_drawer">Close Navigation Drawer</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="update_super_hero">Update Super Hero</string>
+    <string name="update">Update</string>
+    <string name="enter_the_search_term">Enter the search term:</string>
+    <string name="searchHero">Search</string>
+
+    <string name="areYouSure">Are you sure you want to delete the superHero?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="option">Please choose an option</string>
+    <string name="accessToFileStorage">You need an access to a file storage.</string>
+    <string name="chooseOption">Please choose an option:</string>
+    <string name="get_all_super_heroes">GET All Super Heroes</string>
+    <string name="create_super_hero_http">Create Super Hero</string>
+
+    <string-array name="dialog_options">
+        <item>Browse Gallery</item>
+        <item>Take a Photo</item>
+    </string-array>
+</resources>

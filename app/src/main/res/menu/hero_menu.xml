@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/search"
+            android:icon="@drawable/ic_black_eye"
+            android:title="@string/search" />
+        <item
+            android:id="@+id/http"
+            android:title="Connect To REST API"/>
+        <item
+            android:id="@+id/exit"
+            android:title="@string/exit"/>
+    </group>
+</menu>

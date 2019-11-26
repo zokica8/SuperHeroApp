@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#253748</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#FF6F00</color>
+    <color name="spinnerColor">#000000</color>
+    <color name="dropDownArrow">#FAC740</color>
+    <color name="editText">#FFFFFF</color>
+    <color name="deleteDialog">#DF4524</color>
+    <color name="dialogText">#000000</color>
+    <color name="dialogButtons">#206309</color>
+    <color name="chooseOptionDialog">#2555A3</color>
+</resources>

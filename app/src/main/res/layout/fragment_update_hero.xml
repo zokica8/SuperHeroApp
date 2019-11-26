@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/hero_bg_gradient"
+        tools:context=".fragments.CreateHeroFragment">
+
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:gravity="center"
+            android:text="@string/update_super_hero"
+            android:textColor="#FAC740"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@id/superhero_description_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/superhero_name_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:ems="10"
+            android:hint="@string/super_hero_name"
+            android:inputType="textNoSuggestions"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:theme="@style/EditTextHint"
+            app:layout_constraintBottom_toTopOf="@id/superhero_description_et"
+            app:layout_constraintStart_toStartOf="@+id/superhero_description_et"
+            app:layout_constraintTop_toBottomOf="@id/textView" />
+
+        <EditText
+            android:id="@+id/superhero_description_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/editText"
+            android:gravity="top|left"
+            android:hint="@string/write_a_story_about_your_super_hero"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:lines="10"
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@+id/primary_power"
+            app:layout_constraintEnd_toEndOf="@+id/primary_power"
+            app:layout_constraintStart_toStartOf="@+id/primary_power"
+            app:layout_constraintTop_toBottomOf="@+id/superhero_name_et" />
+
+        <TextView
+            android:id="@+id/primary_power"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/primary_power"
+            android:textColor="#FAC740"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/superhero_power_one_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/superhero_description_et" />
+
+        <Spinner
+            android:id="@+id/superhero_power_one_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:theme="@style/spinnerTheme"
+            app:layout_constraintBottom_toTopOf="@+id/secondary_power"
+            app:layout_constraintEnd_toEndOf="@+id/superhero_power_two_spinner"
+            app:layout_constraintStart_toStartOf="@+id/superhero_power_two_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/primary_power" />
+
+        <TextView
+            android:id="@+id/secondary_power"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/secondary_power"
+            android:textColor="#FAC740"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/superhero_power_two_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/superhero_power_one_spinner" />
+
+        <Spinner
+            android:id="@+id/superhero_power_two_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="16dp"
+            android:theme="@style/spinnerTheme"
+            app:layout_constraintBottom_toTopOf="@+id/update_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/secondary_power" />
+
+        <Button
+            android:id="@+id/image_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/hero_solid_button"
+            android:text="@string/upload_image"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/update_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/superhero_power_two_spinner" />
+
+        <Button
+            android:id="@+id/update_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/hero_solid_button"
+            android:text="@string/update"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/superhero_power_two_spinner" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
