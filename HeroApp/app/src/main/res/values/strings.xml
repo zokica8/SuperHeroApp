@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">HeroApp</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todo">todo</string>
+    <string name="lightning_power">Lightning Power</string>
+    <string name="atomic_power">Atomic Power</string>
+    <string name="rocket_power">Rocket Power</string>
+    <string name="choose_powers">CHOOSE POWERS</string>
+    <string name="pick_a_power">Pick A Power</string>
+    <string name="turtle_power">Turtle Power</string>
+</resources>

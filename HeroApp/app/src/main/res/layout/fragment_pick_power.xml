@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scv_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/hero_bg_gradient"
+    tools:context=".fragments.PickPowerFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingRight="15dp">
+    <TextView
+        android:id="@+id/pick_a_power_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="@string/pick_a_power"
+        android:textColor="#FAC740"
+        android:textSize="28sp" />
+
+        <Button
+            android:id="@+id/turtle_power_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/turtle_power_option"
+            android:drawableLeft="@drawable/turtle_power"
+            />
+
+        <Button
+            android:id="@+id/lightning_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/lightning_option"
+            android:drawableLeft="@drawable/lightning"
+            />
+
+        <Button
+            android:id="@+id/flight_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/flight_option"
+            android:drawableLeft="@drawable/super_man_crest"
+            />
+
+        <Button
+            android:id="@+id/web_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/web_slinging_option"
+            android:drawableLeft="@drawable/spider_web"
+            />
+
+        <Button
+            android:id="@+id/laser_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/laser_vision_option"
+            android:drawableLeft="@drawable/laser_vision"
+            />
+
+        <Button
+            android:id="@+id/strength_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/super_strength_option"
+            android:drawableLeft="@drawable/super_strength"
+            />
+
+        <Button
+            android:id="@+id/back_story_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="55dp"
+            android:layout_gravity="center"
+            android:background="@drawable/show_backstory_button"
+            />
+
+    </LinearLayout>
+
+
+</FrameLayout>
+</ScrollView>
