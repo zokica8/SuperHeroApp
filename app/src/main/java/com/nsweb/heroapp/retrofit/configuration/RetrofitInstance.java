@@ -1,9 +1,13 @@
 package com.nsweb.heroapp.retrofit.configuration;
 
 import com.nsweb.heroapp.application.SuperHeroApplication;
+import com.nsweb.heroapp.retrofit.client.SuperHeroClient;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -18,35 +22,42 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import timber.log.Timber;
 
 // creating a singleton retrofit instance
+@Singleton
 public class RetrofitInstance {
 
-    private static Retrofit retrofit = null;
-    private static HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    private Retrofit retrofit;
+    private HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
     private static final String HTTP_HEADER_CACHE_CONTROL = "Cache-Control";
     private static final String HTTP_HEADER_PRAGMA = "Pragma";
     private static final long cacheSize = 10 * 1024 * 1024;
-    private static OkHttpClient okHttpClient = new OkHttpClient.Builder()
+    private OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .cache(cache())
             .addInterceptor(loggingInterceptor)
             .addNetworkInterceptor(networkInterceptor()) // used ONLY when network is ON (connected to the internet)
             .addInterceptor(offlineInterceptor())  // used when network is OFFLINE OR ONLINE
             .build();
 
-    private RetrofitInstance() {
-
+    @Inject
+    public RetrofitInstance() {
+        getRetrofitInstance();
     }
 
-    public static Retrofit getRetrofitInstance(String protocol, String host, String port) {
+    public Retrofit getRetrofitInstance() {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         if(retrofit == null) {
-            return new Retrofit.Builder()
-                    .baseUrl(String.format("%s://%s:%s", protocol, host, port))
+            retrofit =  new Retrofit.Builder()
+                    .baseUrl("http://localhost:3001/")
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(JacksonConverterFactory.create())
                     .client(okHttpClient)
                     .build();
         }
         return retrofit;
+    }
+
+    public SuperHeroClient client() {
+        SuperHeroClient superHeroClient = retrofit.create(SuperHeroClient.class);
+        return superHeroClient;
     }
 
     private static Cache cache() {

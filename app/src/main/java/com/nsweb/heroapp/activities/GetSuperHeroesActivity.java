@@ -15,12 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.adapters.SuperHeroRecyclerAdapter;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.domain.SuperHero;
 import com.nsweb.heroapp.retrofit.client.SuperHeroClient;
 import com.nsweb.heroapp.retrofit.configuration.RetrofitInstance;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,31 +36,40 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 public class GetSuperHeroesActivity extends AppCompatActivity {
 
     @BindView(R.id.superhero_recycler_view)
     RecyclerView superHeroRecyclerView;
 
-    private RecyclerView.LayoutManager layoutManager;
-    private SuperHeroRecyclerAdapter superHeroRecyclerAdapter;
+    @Inject
+    RetrofitInstance retrofitInstance;
 
-    private Retrofit retrofit;
-    private SuperHeroClient superHeroClient;
-
-    private MainActivity mainActivity = new MainActivity();
+    @Inject
+    MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_super_heroes);
 
+        activityScope();
+
         ButterKnife.bind(this);
 
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         superHeroRecyclerView.setLayoutManager(layoutManager);
 
         getSuperHeroesFromApi();
+    }
+
+    private void activityScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
+        Toothpick.inject(this, scope);
     }
 
     private void getSuperHeroesFromApi() {
@@ -65,20 +77,17 @@ public class GetSuperHeroesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         List<SuperHero> superHeroes = (List<SuperHero>) intent.getSerializableExtra("superheroes");
 
-        superHeroRecyclerAdapter = new SuperHeroRecyclerAdapter(superHeroes);
+        SuperHeroRecyclerAdapter superHeroRecyclerAdapter = new SuperHeroRecyclerAdapter(superHeroes);
         superHeroRecyclerView.setAdapter(superHeroRecyclerAdapter);
-
-        retrofit = RetrofitInstance.getRetrofitInstance("http", "localhost", "3001");
-        superHeroClient = retrofit.create(SuperHeroClient.class);
 
         superHeroRecyclerAdapter.setItemClickListener((view, position) -> {
             Timber.i("You clicked item with position: %d", position);
-            findSuperHeroById(superHeroes.get(position).getSuperhero_id());
+            findSuperHeroById(superHeroes.get(position).getId());
         });
     }
 
     private void findSuperHeroById(long id) {
-        Observable<SuperHero> superHero = superHeroClient.getSuperHeroById(id);
+        Observable<SuperHero> superHero = retrofitInstance.client().getSuperHeroById(id);
 
         Disposable disposable = superHero.map(i -> i)
                 .subscribeOn(Schedulers.newThread())

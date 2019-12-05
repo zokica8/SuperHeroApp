@@ -4,8 +4,15 @@ import com.nsweb.heroapp.domain.SuperHero;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class SuperHeroDatabase {
 
+    // a constructor for dependency injection
+    @Inject
+    public SuperHeroDatabase() { }
     // implementing methods for doing CRUD operations on the data (create, retrieve, update, delete)
 
     // creating a super hero

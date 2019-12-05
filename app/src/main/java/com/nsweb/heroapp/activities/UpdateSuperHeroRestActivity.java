@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.nsweb.heroapp.BuildConfig;
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.dialogoptions.DialogOptionsHelper;
 import com.nsweb.heroapp.dialogs.ChooseOptionDialog;
@@ -38,6 +39,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +56,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 public class UpdateSuperHeroRestActivity extends AppCompatActivity {
 
@@ -74,30 +80,29 @@ public class UpdateSuperHeroRestActivity extends AppCompatActivity {
     @BindView(R.id.image_btn)
     Button image_button;
 
-    private SuperHeroDatabase database = new SuperHeroDatabase();
-
-    private Unbinder unbinder;
-
     public Uri imageUri = Uri.parse("");
 
     private boolean clicked = false;
 
     private File photoFile;
 
-    private SuperHeroClient superHeroClient;
-    private Retrofit retrofit;
+    @Inject
+    MainActivity mainActivity;
 
-    private MainActivity mainActivity = new MainActivity();
+    @Inject
+    SuperHeroDatabase database;
+
+    @Inject
+    RetrofitInstance retrofitInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_super_hero_rest);
 
-        unbinder = ButterKnife.bind(this);
+        activityScope();
 
-        retrofit = RetrofitInstance.getRetrofitInstance("http", "localhost", "3001");
-        superHeroClient = retrofit.create(SuperHeroClient.class);
+        ButterKnife.bind(this);
 
         ArrayAdapter<CharSequence> adapter = getCharSequenceArrayAdapter();
 
@@ -132,7 +137,7 @@ public class UpdateSuperHeroRestActivity extends AppCompatActivity {
                 superHero.setSecondaryPower((String) super_hero_power_two_spinner.getSelectedItem());
                 superHero.setImageUri(imageUri.toString());
 
-                Observable<SuperHero> updatedSuperHero = superHeroClient.updateSuperHero(superHero, superHero.getId());
+                Observable<SuperHero> updatedSuperHero = retrofitInstance.client().updateSuperHero(superHero, superHero.getId());
                 Disposable disposable = updatedSuperHero
                         .map(update -> update)
                         .subscribeOn(Schedulers.newThread())
@@ -148,6 +153,12 @@ public class UpdateSuperHeroRestActivity extends AppCompatActivity {
                 mainActivity.compositeDisposable.add(disposable);
             }
         });
+    }
+
+    private void activityScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
+        Toothpick.inject(this, scope);
     }
 
     public void browseGallery() {

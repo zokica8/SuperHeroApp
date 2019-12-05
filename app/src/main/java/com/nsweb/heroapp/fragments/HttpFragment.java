@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.activities.GetSuperHeroesActivity;
 import com.nsweb.heroapp.activities.HttpActivity;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.domain.SuperHero;
 import com.nsweb.heroapp.retrofit.client.SuperHeroClient;
 import com.nsweb.heroapp.retrofit.configuration.RetrofitInstance;
@@ -23,6 +24,8 @@ import com.nsweb.heroapp.retrofit.configuration.RetrofitInstance;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,16 +52,18 @@ import timber.log.Timber;
  */
 public class HttpFragment extends Fragment {
 
+    private OnFragmentInteractionListener mListener;
+
     @BindView(R.id.http_get_button)
     Button httpGetButton;
 
-    private Retrofit retrofit;
+    @Inject
+    RetrofitInstance retrofitInstance;
 
-    private SuperHeroClient superHeroClient;
+    @Inject
+    MainFragment mainFragment;
 
-    private OnFragmentInteractionListener mListener;
-
-    private MainFragment mainFragment = new MainFragment();
+    private static int count = 0;
 
     public HttpFragment() {
         // Required empty public constructor
@@ -71,14 +79,20 @@ public class HttpFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_http, container, false);
-        ButterKnife.bind(this, view);
 
-        retrofit = RetrofitInstance.getRetrofitInstance("http", "localhost", "3001");
-        superHeroClient = retrofit.create(SuperHeroClient.class);
+        fragmentScope();
+
+        ButterKnife.bind(this, view);
 
         httpGetAllSuperHeroes();
 
         return view;
+    }
+
+    private void fragmentScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), HttpActivity.class, this);
+        Toothpick.inject(this, scope);
     }
 
     private void httpGetAllSuperHeroes() {
@@ -86,7 +100,7 @@ public class HttpFragment extends Fragment {
     }
 
     private void getAllSuperHeroes() {
-        Observable<List<SuperHero>> superHeroes = superHeroClient.getAllSuperHeroes();
+        Observable<List<SuperHero>> superHeroes = retrofitInstance.client().getAllSuperHeroes();
 
         Disposable disposable = superHeroes
                 .map(superHeroesList -> superHeroesList)
@@ -100,6 +114,10 @@ public class HttpFragment extends Fragment {
     }
 
     private void loadSuperHeroesFromRestApi(List<SuperHero> superHeroesFromResponse) {
+        if(count < 1) {
+            SuperHero.saveInTx(superHeroesFromResponse);
+            count++;
+        }
         Intent intent = new Intent();
         intent.putExtra("superheroes", (ArrayList<SuperHero>)superHeroesFromResponse);
         intent.setClass(getActivity(), GetSuperHeroesActivity.class);

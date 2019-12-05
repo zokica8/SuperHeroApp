@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.nsweb.heroapp.BuildConfig;
 import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.activities.MainActivity;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.dialogs.CustomDialog;
 import com.nsweb.heroapp.domain.SuperHero;
@@ -27,9 +28,14 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +65,8 @@ public class IndividualHeroFragment extends Fragment {
 
     private Uri imagePath = Uri.parse("");
 
-    private SuperHeroDatabase database = new SuperHeroDatabase();
+    @Inject
+    SuperHeroDatabase database;
 
     public IndividualHeroFragment() {
         // Required empty public constructor
@@ -74,6 +81,8 @@ public class IndividualHeroFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_individual_hero, container, false);
+
+        fragmentScope();
 
         ButterKnife.bind(this, view);
 
@@ -110,6 +119,12 @@ public class IndividualHeroFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void fragmentScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
+        Toothpick.inject(this, scope);
     }
 
     private void deletingSuperHero(SuperHero superHeroes) {

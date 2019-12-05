@@ -16,9 +16,11 @@ import com.nsweb.heroapp.domain.SuperHero;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class SuperHeroAdapter extends ArrayAdapter<SuperHero> {
 
-    private MainActivity mainActivity;
+    private MainActivity mainActivity = new MainActivity();
 
     public SuperHeroAdapter(@NonNull Context context, int resource, @NonNull List<SuperHero> objects) {
         super(context, resource, objects);
@@ -28,8 +30,6 @@ public class SuperHeroAdapter extends ArrayAdapter<SuperHero> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
-
-        mainActivity = new MainActivity();
 
         TextView textView = view.findViewById(android.R.id.text1);
         textView.setTextColor(Color.WHITE);

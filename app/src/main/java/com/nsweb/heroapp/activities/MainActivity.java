@@ -10,11 +10,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.domain.SuperHero;
 import com.nsweb.heroapp.fragments.CreateHeroFragment;
@@ -22,21 +22,24 @@ import com.nsweb.heroapp.fragments.IndividualHeroFragment;
 import com.nsweb.heroapp.fragments.MainFragment;
 import com.nsweb.heroapp.fragments.ShowHeroesFragment;
 import com.nsweb.heroapp.fragments.UpdateHeroFragment;
-import com.nsweb.heroapp.retrofit.client.SuperHeroClient;
-import com.nsweb.heroapp.retrofit.configuration.RetrofitInstance;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
-import okhttp3.Cache;
 import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Retrofit;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
+@Singleton
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,
         CreateHeroFragment.OnFragmentInteractionListener, ShowHeroesFragment.OnFragmentInteractionListener,
         IndividualHeroFragment.OnFragmentInteractionListener, UpdateHeroFragment.OnFragmentInteractionListener,
@@ -51,10 +54,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     private SuperHeroDatabase database = new SuperHeroDatabase();
 
+    @Inject
+    MainFragment mainFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        activityScope();
 
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
@@ -63,8 +71,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager manager = this.getSupportFragmentManager();
-        Fragment fragment = new MainFragment();
-        manager.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        manager.beginTransaction().add(R.id.fragment_container, mainFragment).commit();
+    }
+
+    private void activityScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
+        Toothpick.inject(this, scope);
     }
 
     @Override

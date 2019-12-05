@@ -13,13 +13,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.domain.SuperHero;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -29,16 +35,25 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.searchButton)
     Button searchButton;
 
-    private SuperHeroDatabase database = new SuperHeroDatabase();
+    @Inject
+    SuperHeroDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        activityScope();
+
         ButterKnife.bind(this);
 
         searchHero();
+    }
+
+    private void activityScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
+        Toothpick.inject(this, scope);
     }
 
     private void searchHero() {

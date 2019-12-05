@@ -5,6 +5,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.nsweb.heroapp.activities.MainActivity;
+
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
+
 public class SuperHeroApplication extends Application {
 
     private static SuperHeroApplication instance;
@@ -16,6 +22,14 @@ public class SuperHeroApplication extends Application {
         if(instance == null) {
             instance = this;
         }
+
+        createApplicationScope();
+    }
+
+    private void createApplicationScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope appScope = Toothpick.openScope(this);
+        Toothpick.inject(this, appScope);
     }
 
     public static SuperHeroApplication getInstance() {

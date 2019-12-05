@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.dialogs.CustomDialog;
 import com.nsweb.heroapp.domain.SuperHero;
@@ -27,6 +28,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +42,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 public class IndividualSuperHeroActivity extends AppCompatActivity implements UpdateHeroFragment.OnFragmentInteractionListener {
 
@@ -57,24 +63,25 @@ public class IndividualSuperHeroActivity extends AppCompatActivity implements Up
     @BindView(R.id.delete_btn)
     Button deleteButton;
 
-    private SuperHeroDatabase database = new SuperHeroDatabase();
-
     private Uri imagePath = Uri.parse("");
 
-    private MainActivity mainActivity = new MainActivity();
+    @Inject
+    MainActivity mainActivity;
 
-    private SuperHeroClient superHeroClient;
-    private Retrofit retrofit;
+    @Inject
+    SuperHeroDatabase database;
+
+    @Inject
+    RetrofitInstance retrofitInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_individual_super_hero);
 
-        ButterKnife.bind(this);
+        activityScope();
 
-        retrofit = RetrofitInstance.getRetrofitInstance("http","localhost", "3001");
-        superHeroClient = retrofit.create(SuperHeroClient.class);
+        ButterKnife.bind(this);
 
         getSuperHeroFromApi();
 
@@ -101,6 +108,12 @@ public class IndividualSuperHeroActivity extends AppCompatActivity implements Up
         });
     }
 
+    private void activityScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
+        Toothpick.inject(this, scope);
+    }
+
     private void deleteFile() {
         File file = new File(imagePath.getPath());
         if(file.exists()) {
@@ -114,13 +127,13 @@ public class IndividualSuperHeroActivity extends AppCompatActivity implements Up
         areYouSureDialog.setContentView(R.layout.delete_superhero_dialog);
         areYouSureDialog.show();
         areYouSureDialog.setOnPositiveButtonClickListener(() -> {
-            Observable<SuperHero> superHero = superHeroClient.deleteSuperHero(superHeroes.getSuperhero_id());
+            Observable<SuperHero> superHero = retrofitInstance.client().deleteSuperHero(superHeroes.getId());
             Disposable disposable = superHero
                     .map(hero -> hero)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        database.deleteSuperHero(superHeroes.getSuperhero_id());
+                        database.deleteSuperHero(superHeroes.getId());
                         long count = database.getSuperHeroCount();
                         Toast.makeText(IndividualSuperHeroActivity.this, "Number of super heroes after deleting: " + count, Toast.LENGTH_LONG).show();
                         Timber.i("Number of super heroes after deleting: %d", count);

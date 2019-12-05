@@ -28,20 +28,19 @@ import androidx.fragment.app.Fragment;
 import com.nsweb.heroapp.BuildConfig;
 import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.activities.MainActivity;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.dialogoptions.DialogOptionsHelper;
 import com.nsweb.heroapp.dialogs.ChooseOptionDialog;
 import com.nsweb.heroapp.domain.SuperHero;
-import com.nsweb.heroapp.retrofit.client.SuperHeroClient;
 import com.nsweb.heroapp.retrofit.configuration.RetrofitInstance;
 import com.nsweb.heroapp.spinners.SuperHeroSpinner;
-import com.orm.SugarRecord;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,11 +50,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,8 +83,6 @@ public class CreateHeroFragment extends Fragment {
     @BindView(R.id.image_btn)
     Button image_button;
 
-    private SuperHeroDatabase database = new SuperHeroDatabase();
-
     private static final String LOGTAG = "ZV";
 
     public Uri imageUri = Uri.parse("");
@@ -95,14 +91,16 @@ public class CreateHeroFragment extends Fragment {
 
     private File photoFile;
 
-    private SuperHeroClient superHeroClient;
+    @Inject
+    RetrofitInstance retrofitInstance;
 
-    private Retrofit retrofit;
+    @Inject
+    MainFragment mainFragment;
 
-    private long lastId = 0;
+    @Inject
+    SuperHeroDatabase database;
 
-    private MainFragment mainFragment = new MainFragment();
-
+    @Inject
     public CreateHeroFragment() {
         // Required empty public constructor
     }
@@ -117,6 +115,8 @@ public class CreateHeroFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_superhero, container, false);
 
+        fragmentScope();
+
         ButterKnife.bind(this, view);
         ArrayAdapter<CharSequence> adapter = getCharSequenceArrayAdapter();
 
@@ -125,11 +125,14 @@ public class CreateHeroFragment extends Fragment {
         super_hero_power_one_spinner.setAdapter(adapter);
         super_hero_power_two_spinner.setAdapter(adapter);
 
-        retrofit = RetrofitInstance.getRetrofitInstance("http", "localhost", "3001");
-        superHeroClient = retrofit.create(SuperHeroClient.class);
-
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void fragmentScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
+        Toothpick.inject(this, scope);
     }
 
     @Override
@@ -233,8 +236,8 @@ public class CreateHeroFragment extends Fragment {
     @OnClick(R.id.image_btn)
     public void imageDialog() {
         ChooseOptionDialog dialog = new ChooseOptionDialog(getActivity(), "Please choose an option.");
-        dialog.setOnGalleryButtonClickListener(() -> browsePhotosFromGallery());
-        dialog.setOnCameraButtonClickListener(() -> takeAPhotoWithCamera());
+        dialog.setOnGalleryButtonClickListener(this::browsePhotosFromGallery);
+        dialog.setOnCameraButtonClickListener(this::takeAPhotoWithCamera);
         clicked = true;
     }
 
@@ -272,14 +275,14 @@ public class CreateHeroFragment extends Fragment {
             SuperHero superHero = new SuperHero(superHeroName.getText().toString(), superHeroDescription.getText().toString(),
                     String.valueOf(super_hero_power_one_spinner.getSelectedItem()), String.valueOf(super_hero_power_two_spinner.getSelectedItem()),
                     imageUri.toString());
-            Observable<SuperHero> insertedHero = superHeroClient.insertSuperHero(superHero);
+            Observable<SuperHero> insertedHero = retrofitInstance.client().insertSuperHero(superHero);
             Disposable disposable = insertedHero
                     .map(created -> created)
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
-                        long getId = response.getSuperhero_id();
-                        database.updateSequence(getId, "SUPER_HERO");
+                        long getId = response.getId();
+                        //database.updateSequence(getId, "SUPER_HERO");
                     }, error -> Toast.makeText(getContext(), "Can not save individual hero! Reason: " + error.getMessage(), Toast.LENGTH_LONG).show(),
                             () -> Timber.i("Save completed on: %s", Thread.currentThread().getName()));
 

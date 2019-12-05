@@ -9,24 +9,36 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.fragments.CreateHeroFragment;
 import com.nsweb.heroapp.fragments.HttpFragment;
 
+import javax.inject.Inject;
+
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
+
 public class HttpActivity extends AppCompatActivity implements HttpFragment.OnFragmentInteractionListener,
         CreateHeroFragment.OnFragmentInteractionListener {
+
+    @Inject
+    HttpFragment httpFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
 
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
+        Toothpick.inject(this, scope);
+
         FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = new HttpFragment();
-        manager.beginTransaction().add(R.id.fragment_container, fragment).commit();
+        manager.beginTransaction().add(R.id.fragment_container, httpFragment).commit();
     }
 
     @Override

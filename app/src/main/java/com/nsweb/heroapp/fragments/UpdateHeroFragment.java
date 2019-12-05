@@ -25,6 +25,8 @@ import androidx.fragment.app.Fragment;
 
 import com.nsweb.heroapp.BuildConfig;
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.activities.MainActivity;
+import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.database.SuperHeroDatabase;
 import com.nsweb.heroapp.dialogoptions.DialogOptionsHelper;
 import com.nsweb.heroapp.dialogs.ChooseOptionDialog;
@@ -36,12 +38,17 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,8 +78,6 @@ public class UpdateHeroFragment extends Fragment {
     @BindView(R.id.image_btn)
     Button image_button;
 
-    private SuperHeroDatabase database = new SuperHeroDatabase();
-
     private Unbinder unbinder;
 
     public Uri imageUri = Uri.parse("");
@@ -81,6 +86,10 @@ public class UpdateHeroFragment extends Fragment {
 
     private File photoFile;
 
+    @Inject
+    SuperHeroDatabase database;
+
+    @Inject
     public UpdateHeroFragment() {
         // Required empty public constructor
     }
@@ -88,6 +97,10 @@ public class UpdateHeroFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
+        Toothpick.inject(this, scope);
     }
 
     @Override
