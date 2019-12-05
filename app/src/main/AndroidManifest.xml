@@ -16,15 +16,15 @@
 
     <application
         android:name=".application.SuperHeroApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:icon">
-        <activity android:name=".activities.UpdateSuperHeroRestActivity"></activity>
+        android:fullBackupContent="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.UpdateSuperHeroRestActivity"/>
         <activity android:name=".activities.IndividualSuperHeroActivity" />
         <activity android:name=".activities.GetSuperHeroesActivity" />
         <activity android:name=".activities.HttpActivity" />

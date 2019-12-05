@@ -27,7 +27,7 @@ public class SuperHeroDatabase {
 
     // retrieving all superheroes
     public List<SuperHero> getAllSuperHeroes() {
-        return SuperHero.find(SuperHero.class, null, null);
+        return SuperHero.find(SuperHero.class, null, (String[]) null);
     }
 
     // return the number of heroes in the database
