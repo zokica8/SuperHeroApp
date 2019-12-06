@@ -4,24 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.activities.GetSuperHeroesActivity;
 import com.nsweb.heroapp.activities.HttpActivity;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.domain.SuperHero;
-import com.nsweb.heroapp.retrofit.client.SuperHeroClient;
 import com.nsweb.heroapp.retrofit.configuration.RetrofitInstance;
+import com.nsweb.heroapp.utils.PreferencesUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +28,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 import timber.log.Timber;
 import toothpick.Scope;
 import toothpick.Toothpick;
@@ -62,8 +54,6 @@ public class HttpFragment extends Fragment {
 
     @Inject
     MainFragment mainFragment;
-
-    private static int count = 0;
 
     public HttpFragment() {
         // Required empty public constructor
@@ -114,10 +104,12 @@ public class HttpFragment extends Fragment {
     }
 
     private void loadSuperHeroesFromRestApi(List<SuperHero> superHeroesFromResponse) {
+        int count = PreferencesUtils.getCount(getContext());
         if(count < 1) {
             SuperHero.saveInTx(superHeroesFromResponse);
-            count++;
+            PreferencesUtils.setCount(getContext(), count + 1);
         }
+
         Intent intent = new Intent();
         intent.putExtra("superheroes", (ArrayList<SuperHero>)superHeroesFromResponse);
         intent.setClass(getActivity(), GetSuperHeroesActivity.class);
