@@ -8,6 +8,7 @@
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
     tools:context=".activities.MainActivity"
+    android:background="@drawable/hero_bg_gradient"
     tools:openDrawer="start">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"

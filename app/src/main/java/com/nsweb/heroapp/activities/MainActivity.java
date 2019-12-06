@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager manager = this.getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.fragment_container, mainFragment).commit();
+        Fragment fragment = new MainFragment();
+        manager.beginTransaction().add(R.id.fragment_container, fragment).commit();
     }
 
     private void activityScope() {
@@ -174,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
     public void returnToMainFragment() {
-        MainFragment mainFragment = new MainFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment)
                 .commit();
     }
