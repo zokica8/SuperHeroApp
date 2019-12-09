@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/hero_bg_gradient"
-    tools:context=".activities.GetSuperHeroesActivity">
+    tools:context=".ui.activities.GetSuperHeroesActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/superhero_recycler_view"

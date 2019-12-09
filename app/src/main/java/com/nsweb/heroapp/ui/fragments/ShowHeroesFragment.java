@@ -3,78 +3,75 @@ package com.nsweb.heroapp.ui.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
 
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.ui.activities.MainActivity;
+import com.nsweb.heroapp.ui.adapters.SuperHeroAdapter;
+import com.nsweb.heroapp.application.SuperHeroApplication;
+import com.nsweb.heroapp.data.domain.SuperHero;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BackStoryFragment.OnFragmentInteractionListener} interface
+ * {@link ShowHeroesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BackStoryFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class BackStoryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class ShowHeroesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public BackStoryFragment() {
-        // Required empty public constructor
-    }
+    @BindView(R.id.superheroes)
+    ListView superheroes_list;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BackStoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BackStoryFragment newInstance(String param1, String param2) {
-        BackStoryFragment fragment = new BackStoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public ShowHeroesFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_back_story, container, false);
+        View view = inflater.inflate(R.layout.fragment_show_superheroes, container, false);
+
+        fragmentScope();
+
+        ButterKnife.bind(this, view);
+
+        final MainActivity mainActivity = (MainActivity) getActivity();
+
+        SuperHeroAdapter superHeroes = new SuperHeroAdapter(getActivity(), android.R.layout.simple_list_item_1, mainActivity.loadSuperHeroes());
+
+        superheroes_list.setAdapter(superHeroes);
+
+        superheroes_list.setOnItemClickListener((adapterView, view1, position, l) -> {
+            SuperHero value = (SuperHero) adapterView.getItemAtPosition(position);
+            mainActivity.showIndividualHero(value);
+        });
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void fragmentScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
+        Toothpick.inject(this, scope);
     }
 
     @Override

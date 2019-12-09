@@ -9,72 +9,77 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.nsweb.heroapp.R;
+import com.nsweb.heroapp.ui.activities.MainActivity;
+import com.nsweb.heroapp.application.SuperHeroApplication;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.disposables.CompositeDisposable;
+import toothpick.Scope;
+import toothpick.Toothpick;
+import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BackStoryFragment.OnFragmentInteractionListener} interface
+ * {@link MainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BackStoryFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class BackStoryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+@Singleton
+public class MainFragment extends Fragment {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @BindView(R.id.save_hero_btn)
+    Button saveHeroButton;
+
+    @BindView(R.id.list_heroes_btn)
+    Button showHeroesButton;
+
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private OnFragmentInteractionListener mListener;
 
-    public BackStoryFragment() {
+    @Inject
+    public MainFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BackStoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BackStoryFragment newInstance(String param1, String param2) {
-        BackStoryFragment fragment = new BackStoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        fragmentScope();
+
+        ButterKnife.bind(this, view);
+
+        saveHeroButton.setOnClickListener(v -> {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.createHeroScreen();
+        });
+
+        showHeroesButton.setOnClickListener(v -> {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.showHeroesScreen();
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_back_story, container, false);
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void fragmentScope() {
+        Toothpick.setConfiguration(Configuration.forDevelopment());
+        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
+        Toothpick.inject(this, scope);
     }
 
     @Override

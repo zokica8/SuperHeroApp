@@ -1,4 +1,4 @@
-package com.nsweb.heroapp.activities;
+package com.nsweb.heroapp.ui.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.nsweb.heroapp.R;
-import com.nsweb.heroapp.fragments.BackStoryFragment;
-import com.nsweb.heroapp.fragments.MainFragment;
-import com.nsweb.heroapp.fragments.PickPowerFragment;
+import com.nsweb.heroapp.ui.fragments.BackStoryFragment;
+import com.nsweb.heroapp.ui.fragments.MainFragment;
+import com.nsweb.heroapp.ui.fragments.PickPowerFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,
         PickPowerFragment.OnFragmentInteractionListener, BackStoryFragment.OnFragmentInteractionListener {

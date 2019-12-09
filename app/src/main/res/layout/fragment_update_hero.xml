@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    tools:context=".ui.activities.MainActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/hero_bg_gradient"
-        tools:context=".fragments.CreateHeroFragment">
+        tools:context=".ui.fragments.CreateHeroFragment">
 
 
         <TextView

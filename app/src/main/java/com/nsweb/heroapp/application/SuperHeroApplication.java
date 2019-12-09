@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.nsweb.heroapp.activities.MainActivity;
+import com.nsweb.heroapp.ui.activities.MainActivity;
 
 import toothpick.Scope;
 import toothpick.Toothpick;

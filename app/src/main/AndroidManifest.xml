@@ -24,10 +24,10 @@
         android:theme="@style/AppTheme"
         android:fullBackupContent="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.UpdateSuperHeroRestActivity"/>
-        <activity android:name=".activities.IndividualSuperHeroActivity" />
-        <activity android:name=".activities.GetSuperHeroesActivity" />
-        <activity android:name=".activities.HttpActivity" />
+        <activity android:name=".ui.activities.UpdateSuperHeroRestActivity"/>
+        <activity android:name=".ui.activities.IndividualSuperHeroActivity" />
+        <activity android:name=".ui.activities.GetSuperHeroesActivity" />
+        <activity android:name=".ui.activities.HttpActivity" />
 
         <meta-data
             android:name="DATABASE"
@@ -42,9 +42,9 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.nsweb.heroapp" />
 
-        <activity android:name=".activities.SearchActivity" />
+        <activity android:name=".ui.activities.SearchActivity" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

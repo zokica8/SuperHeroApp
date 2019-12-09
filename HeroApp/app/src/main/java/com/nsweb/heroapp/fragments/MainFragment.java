@@ -1,4 +1,4 @@
-package com.nsweb.heroapp.fragments;
+package com.nsweb.heroapp.ui.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.nsweb.heroapp.R;
-import com.nsweb.heroapp.activities.MainActivity;
+import com.nsweb.heroapp.ui.activities.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
