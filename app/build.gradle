@@ -24,6 +24,14 @@ android {
     }
 }
 
+android {
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
 android.testOptions.unitTests.all {
     // Configure whether failing tests should fail the build
     ignoreFailures false
@@ -112,7 +120,11 @@ dependencies {
 
     // ToothPick Testing
     testImplementation "com.github.stephanenicolas.toothpick:toothpick-testing-junit5:$toothPickVersion"
-    testImplementation "org.mockito:mockito-core:3.2.0"
+
+    //Mockito
+    def mockitoVersion='3.2.0'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-junit-jupiter:$mockitoVersion"
 
     // Testing
     // Junit4
@@ -127,8 +139,15 @@ dependencies {
     //Junit5 Params - Optional
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junit5Version"
 
+    testImplementation 'androidx.test:core:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //Robolectric
+    testImplementation 'org.robolectric:robolectric:4.3'
+
+    //Truth
+    testImplementation 'com.google.truth:truth:1.0'
 
     // AssertJ
     testImplementation 'org.assertj:assertj-core:3.14.0'
