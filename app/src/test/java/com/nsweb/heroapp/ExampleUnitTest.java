@@ -2,6 +2,7 @@ package com.nsweb.heroapp;
 
 
 import com.nsweb.heroapp.data.repositories.SuperHeroRepository;
+import com.nsweb.heroapp.viewmodel.SuperHeroViewModel;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,9 +23,17 @@ class ExampleUnitTest {
     @Mock
     private SuperHeroRepository superHeroRepository;
 
+    @Mock
+    private SuperHeroViewModel superHeroViewModel;
+
     @Test
     void shouldTestMock() {
         assertThat(superHeroRepository).isNotNull();
+    }
+
+    @Test
+    void letsTestSomething() {
+        assertThat(superHeroViewModel).isNotNull();
     }
 
     @Test
