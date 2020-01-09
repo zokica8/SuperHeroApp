@@ -29,7 +29,7 @@ public class RetrofitInstance {
     private HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
     private static final String HTTP_HEADER_CACHE_CONTROL = "Cache-Control";
     private static final String HTTP_HEADER_PRAGMA = "Pragma";
-    private static final long cacheSize = 10 * 1024 * 1024;
+    private static final long cacheSize = 10 * 1024 * 1024; // maximum size of the cache
     private OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .cache(cache())
             .addInterceptor(loggingInterceptor)
