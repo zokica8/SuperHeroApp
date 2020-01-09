@@ -99,6 +99,8 @@ public class SuperHeroRepository {
     }
 
     public void dispose() {
-        disposable.dispose();
+        // instead of calling dispose(), call clear()
+        //disposable.dispose();
+        disposable.clear();
     }
 }
