@@ -28,15 +28,10 @@ import com.orm.SugarContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener,
         CreateHeroFragment.OnFragmentInteractionListener, ShowHeroesFragment.OnFragmentInteractionListener,
@@ -50,15 +45,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     private SuperHeroDatabase database = new SuperHeroDatabase();
 
-    @Inject
-    MainFragment mainFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((SuperHeroApplication)getApplicationContext()).component.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        activityScope();
 
         ButterKnife.bind(this);
         Timber.plant(new Timber.DebugTree());
@@ -69,12 +60,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         FragmentManager manager = this.getSupportFragmentManager();
         Fragment fragment = new MainFragment();
         manager.beginTransaction().add(R.id.fragment_container, fragment).commit();
-    }
-
-    private void activityScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
-        Toothpick.inject(this, scope);
     }
 
     @Override
@@ -171,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
     public void returnToMainFragment() {
+        MainFragment mainFragment = new MainFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment)
                 .commit();
     }

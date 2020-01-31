@@ -28,7 +28,6 @@ import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.data.database.SuperHeroDatabase;
 import com.nsweb.heroapp.data.domain.SuperHero;
-import com.nsweb.heroapp.data.retrofit.configuration.RetrofitInstance;
 import com.nsweb.heroapp.ui.dialogoptions.DialogOptionsHelper;
 import com.nsweb.heroapp.ui.dialogs.ChooseOptionDialog;
 import com.nsweb.heroapp.ui.spinners.SuperHeroSpinner;
@@ -47,9 +46,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 public class UpdateSuperHeroRestActivity extends AppCompatActivity {
 
@@ -81,17 +77,13 @@ public class UpdateSuperHeroRestActivity extends AppCompatActivity {
     SuperHeroDatabase database;
 
     @Inject
-    RetrofitInstance retrofitInstance;
-
-    @Inject
     SuperHeroViewModel superHeroViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((SuperHeroApplication)getApplicationContext()).component.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_super_hero_rest);
-
-        activityScope();
 
         ButterKnife.bind(this);
 
@@ -136,12 +128,6 @@ public class UpdateSuperHeroRestActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void activityScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
-        Toothpick.inject(this, scope);
     }
 
     public void browseGallery() {

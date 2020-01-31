@@ -16,11 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.nsweb.heroapp.R;
-import com.nsweb.heroapp.ui.activities.MainActivity;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.data.database.SuperHeroDatabase;
-import com.nsweb.heroapp.ui.dialogs.CustomDialog;
 import com.nsweb.heroapp.data.domain.SuperHero;
+import com.nsweb.heroapp.ui.activities.MainActivity;
+import com.nsweb.heroapp.ui.dialogs.CustomDialog;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -30,9 +30,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,8 +76,6 @@ public class IndividualHeroFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_individual_hero, container, false);
 
-        fragmentScope();
-
         ButterKnife.bind(this, view);
 
         Bundle bundle = this.getArguments();
@@ -118,12 +113,6 @@ public class IndividualHeroFragment extends Fragment {
         return view;
     }
 
-    private void fragmentScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
-        Toothpick.inject(this, scope);
-    }
-
     private void deletingSuperHero(SuperHero superHeroes) {
         CustomDialog areYouSureDialog = new CustomDialog(getActivity(),
                 "Are you sure you want to delete the super hero?", "NO", "YES");
@@ -150,6 +139,7 @@ public class IndividualHeroFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        ((SuperHeroApplication)getActivity().getApplicationContext()).component.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

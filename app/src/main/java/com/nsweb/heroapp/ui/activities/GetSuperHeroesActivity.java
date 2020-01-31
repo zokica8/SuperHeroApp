@@ -26,9 +26,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 public class GetSuperHeroesActivity extends AppCompatActivity {
 
@@ -36,19 +33,16 @@ public class GetSuperHeroesActivity extends AppCompatActivity {
     RecyclerView superHeroRecyclerView;
 
     @Inject
-    RetrofitInstance retrofitInstance;
-
-    @Inject
     SuperHeroViewModel superHeroViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((SuperHeroApplication)getApplicationContext()).component.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_super_heroes);
 
-        activityScope();
-
         ButterKnife.bind(this);
+
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         superHeroRecyclerView.setLayoutManager(layoutManager);
@@ -56,11 +50,6 @@ public class GetSuperHeroesActivity extends AppCompatActivity {
         getSuperHeroesFromApi();
     }
 
-    private void activityScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
-        Toothpick.inject(this, scope);
-    }
 
     private void getSuperHeroesFromApi() {
 

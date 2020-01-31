@@ -9,17 +9,15 @@ import com.nsweb.heroapp.data.repositories.SuperHeroRepository;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
+
 public class SuperHeroViewModel extends ViewModel {
 
-    @Inject
-    SuperHeroRepository superHeroRepository;
+    private SuperHeroRepository superHeroRepository;
 
     @Inject
-    public SuperHeroViewModel() {
-
+    public SuperHeroViewModel(SuperHeroRepository superHeroRepository) {
+        this.superHeroRepository = superHeroRepository;
     }
 
     public LiveData<List<SuperHero>> getAllSuperHeroes() {

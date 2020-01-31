@@ -21,8 +21,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import timber.log.Timber;
 
-// creating a singleton retrofit instance
-@Singleton
 public class RetrofitInstance {
 
     private Retrofit retrofit;

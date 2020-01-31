@@ -19,14 +19,13 @@ import timber.log.Timber;
 @Singleton
 public class SuperHeroRepository {
 
-    @Inject
     RetrofitInstance retrofitInstance;
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
-    public SuperHeroRepository() {
-
+    public SuperHeroRepository(RetrofitInstance retrofitInstance) {
+        this.retrofitInstance = retrofitInstance;
     }
 
     // manipulate the objects in the repository, based on what data you need

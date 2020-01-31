@@ -23,9 +23,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -40,20 +37,13 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((SuperHeroApplication)getApplicationContext()).component.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
-        activityScope();
 
         ButterKnife.bind(this);
 
         searchHero();
-    }
-
-    private void activityScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
-        Toothpick.inject(this, scope);
     }
 
     private void searchHero() {

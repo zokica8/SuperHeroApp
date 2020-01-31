@@ -15,9 +15,7 @@ import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.application.utils.PreferencesUtils;
 import com.nsweb.heroapp.data.domain.SuperHero;
-import com.nsweb.heroapp.data.retrofit.configuration.RetrofitInstance;
 import com.nsweb.heroapp.ui.activities.GetSuperHeroesActivity;
-import com.nsweb.heroapp.ui.activities.HttpActivity;
 import com.nsweb.heroapp.viewmodel.SuperHeroViewModel;
 
 import java.util.ArrayList;
@@ -27,9 +25,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
+import dagger.android.support.AndroidSupportInjection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,9 +39,6 @@ public class HttpFragment extends Fragment {
 
     @BindView(R.id.http_get_button)
     Button httpGetButton;
-
-    @Inject
-    RetrofitInstance retrofitInstance;
 
     @Inject
     SuperHeroViewModel superHeroViewModel;
@@ -65,19 +58,11 @@ public class HttpFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_http, container, false);
 
-        fragmentScope();
-
         ButterKnife.bind(this, view);
 
         httpGetAllSuperHeroes();
 
         return view;
-    }
-
-    private void fragmentScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), HttpActivity.class, this);
-        Toothpick.inject(this, scope);
     }
 
     private void httpGetAllSuperHeroes() {
@@ -110,6 +95,7 @@ public class HttpFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        ((SuperHeroApplication)getActivity().getApplicationContext()).component.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

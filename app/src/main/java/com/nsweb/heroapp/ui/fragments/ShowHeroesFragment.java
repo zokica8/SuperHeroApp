@@ -11,16 +11,13 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 
 import com.nsweb.heroapp.R;
-import com.nsweb.heroapp.ui.activities.MainActivity;
-import com.nsweb.heroapp.ui.adapters.SuperHeroAdapter;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.data.domain.SuperHero;
+import com.nsweb.heroapp.ui.activities.MainActivity;
+import com.nsweb.heroapp.ui.adapters.SuperHeroAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,8 +47,6 @@ public class ShowHeroesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show_superheroes, container, false);
 
-        fragmentScope();
-
         ButterKnife.bind(this, view);
 
         final MainActivity mainActivity = (MainActivity) getActivity();
@@ -68,14 +63,9 @@ public class ShowHeroesFragment extends Fragment {
         return view;
     }
 
-    private void fragmentScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
-        Toothpick.inject(this, scope);
-    }
-
     @Override
     public void onAttach(Context context) {
+        ((SuperHeroApplication)getActivity().getApplicationContext()).component.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

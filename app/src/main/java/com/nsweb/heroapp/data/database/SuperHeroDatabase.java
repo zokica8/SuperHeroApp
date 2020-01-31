@@ -2,14 +2,10 @@ package com.nsweb.heroapp.data.database;
 
 import com.nsweb.heroapp.data.domain.SuperHero;
 
-
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-// a repository for calling a local database to store data locally
-@Singleton
 public class SuperHeroDatabase {
 
     // a constructor for dependency injection

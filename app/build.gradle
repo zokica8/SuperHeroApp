@@ -110,16 +110,24 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
+    // Dagger 2
+    def dagger2Version = '2.25.4'
+    implementation "com.google.dagger:dagger:$dagger2Version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger2Version"
+    implementation "com.google.dagger:dagger-android:$dagger2Version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger2Version"
+    implementation "com.google.dagger:dagger-android-support:$dagger2Version"
+
     // Stream API
     implementation 'com.annimon:stream:1.2.1'
 
-    // ToothPick
-    def toothPickVersion = '3.1.0'
-    implementation "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothPickVersion"
-    annotationProcessor "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothPickVersion"
-
-    // ToothPick Testing
-    testImplementation "com.github.stephanenicolas.toothpick:toothpick-testing-junit5:$toothPickVersion"
+//    // ToothPick
+//    def toothPickVersion = '3.1.0'
+//    implementation "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothPickVersion"
+//    annotationProcessor "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothPickVersion"
+//
+//    // ToothPick Testing
+//    testImplementation "com.github.stephanenicolas.toothpick:toothpick-testing-junit5:$toothPickVersion"
 
     //Mockito
     def mockitoVersion='3.2.0'

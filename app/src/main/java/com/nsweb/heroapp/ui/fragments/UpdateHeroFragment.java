@@ -25,12 +25,11 @@ import androidx.fragment.app.Fragment;
 
 import com.nsweb.heroapp.BuildConfig;
 import com.nsweb.heroapp.R;
-import com.nsweb.heroapp.ui.activities.MainActivity;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.data.database.SuperHeroDatabase;
+import com.nsweb.heroapp.data.domain.SuperHero;
 import com.nsweb.heroapp.ui.dialogoptions.DialogOptionsHelper;
 import com.nsweb.heroapp.ui.dialogs.ChooseOptionDialog;
-import com.nsweb.heroapp.data.domain.SuperHero;
 import com.nsweb.heroapp.ui.spinners.SuperHeroSpinner;
 
 import java.io.File;
@@ -47,9 +46,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,10 +94,6 @@ public class UpdateHeroFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
-        Toothpick.inject(this, scope);
     }
 
     @Override
@@ -304,6 +296,7 @@ public class UpdateHeroFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        ((SuperHeroApplication)getActivity().getApplicationContext()).component.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

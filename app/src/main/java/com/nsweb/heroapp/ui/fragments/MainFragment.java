@@ -3,17 +3,16 @@ package com.nsweb.heroapp.ui.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.fragment.app.Fragment;
+
 import com.nsweb.heroapp.R;
-import com.nsweb.heroapp.ui.activities.MainActivity;
 import com.nsweb.heroapp.application.SuperHeroApplication;
+import com.nsweb.heroapp.ui.activities.MainActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,9 +20,6 @@ import javax.inject.Singleton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,8 +55,6 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        fragmentScope();
-
         ButterKnife.bind(this, view);
 
         saveHeroButton.setOnClickListener(v -> {
@@ -76,14 +70,9 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    private void fragmentScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
-        Toothpick.inject(this, scope);
-    }
-
     @Override
     public void onAttach(Context context) {
+        ((SuperHeroApplication)getActivity().getApplicationContext()).component.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

@@ -19,10 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.data.database.SuperHeroDatabase;
-import com.nsweb.heroapp.ui.dialogs.CustomDialog;
 import com.nsweb.heroapp.data.domain.SuperHero;
+import com.nsweb.heroapp.ui.dialogs.CustomDialog;
 import com.nsweb.heroapp.ui.fragments.UpdateHeroFragment;
-import com.nsweb.heroapp.data.retrofit.configuration.RetrofitInstance;
 import com.nsweb.heroapp.viewmodel.SuperHeroViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -33,14 +32,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 public class IndividualSuperHeroActivity extends AppCompatActivity implements UpdateHeroFragment.OnFragmentInteractionListener {
 
@@ -65,17 +57,13 @@ public class IndividualSuperHeroActivity extends AppCompatActivity implements Up
     SuperHeroDatabase database;
 
     @Inject
-    RetrofitInstance retrofitInstance;
-
-    @Inject
     SuperHeroViewModel superHeroViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((SuperHeroApplication)getApplicationContext()).component.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_individual_super_hero);
-
-        activityScope();
 
         ButterKnife.bind(this);
 
@@ -102,12 +90,6 @@ public class IndividualSuperHeroActivity extends AppCompatActivity implements Up
             SuperHero superHero = (SuperHero) intent.getSerializableExtra("superhero");
             deletingSuperHero(superHero);
         });
-    }
-
-    private void activityScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
-        Toothpick.inject(this, scope);
     }
 
     private void deleteFile() {

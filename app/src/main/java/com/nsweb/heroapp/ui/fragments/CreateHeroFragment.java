@@ -30,7 +30,6 @@ import com.nsweb.heroapp.R;
 import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.data.database.SuperHeroDatabase;
 import com.nsweb.heroapp.data.domain.SuperHero;
-import com.nsweb.heroapp.data.retrofit.configuration.RetrofitInstance;
 import com.nsweb.heroapp.ui.activities.MainActivity;
 import com.nsweb.heroapp.ui.dialogoptions.DialogOptionsHelper;
 import com.nsweb.heroapp.ui.dialogs.ChooseOptionDialog;
@@ -51,9 +50,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,9 +88,6 @@ public class CreateHeroFragment extends Fragment {
     private File photoFile;
 
     @Inject
-    RetrofitInstance retrofitInstance;
-
-    @Inject
     SuperHeroDatabase database;
 
     @Inject
@@ -114,8 +107,6 @@ public class CreateHeroFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_superhero, container, false);
 
-        fragmentScope();
-
         ButterKnife.bind(this, view);
         ArrayAdapter<CharSequence> adapter = getCharSequenceArrayAdapter();
 
@@ -126,12 +117,6 @@ public class CreateHeroFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
-    }
-
-    private void fragmentScope() {
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), MainActivity.class, this);
-        Toothpick.inject(this, scope);
     }
 
     @Override
@@ -311,6 +296,7 @@ public class CreateHeroFragment extends Fragment {
 
     @Override
     public void onAttach(@NotNull Context context) {
+        ((SuperHeroApplication)getActivity().getApplicationContext()).component.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

@@ -16,29 +16,18 @@ import com.nsweb.heroapp.application.SuperHeroApplication;
 import com.nsweb.heroapp.ui.fragments.CreateHeroFragment;
 import com.nsweb.heroapp.ui.fragments.HttpFragment;
 
-import javax.inject.Inject;
-
-import toothpick.Scope;
-import toothpick.Toothpick;
-import toothpick.configuration.Configuration;
-
 public class HttpActivity extends AppCompatActivity implements HttpFragment.OnFragmentInteractionListener,
         CreateHeroFragment.OnFragmentInteractionListener {
 
-    @Inject
-    HttpFragment httpFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((SuperHeroApplication)getApplicationContext()).component.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_http);
 
-        Toothpick.setConfiguration(Configuration.forDevelopment());
-        Scope scope = Toothpick.openScopes(SuperHeroApplication.getInstance(), this);
-        Toothpick.inject(this, scope);
-
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().add(R.id.fragment_container, httpFragment).commit();
+        HttpFragment fragment = new HttpFragment();
+        manager.beginTransaction().add(R.id.fragment_container, fragment).commit();
     }
 
     @Override
